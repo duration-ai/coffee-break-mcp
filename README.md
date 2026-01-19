@@ -117,3 +117,11 @@ bun run start       # Start the server
 - Express 5 + @modelcontextprotocol/sdk
 - Turso (SQLite) + Drizzle ORM
 - EJS templates
+
+## Contributing
+
+See `CONTRIBUTING.md`.
+
+## License
+
+MIT. See `LICENSE`.
