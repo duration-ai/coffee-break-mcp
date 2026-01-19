@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Coffee Break MCP</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Coffee Break MCP</h1>
+    <p class="subtitle">Track your 1-5 minute coffee breaks</p>
+
+    <% if (token) { %>
+      <div class="success">
+        <h2>Your API Token</h2>
+        <p class="warning">Save this token! It will only be shown once.</p>
+        <code class="token"><%= token %></code>
+        <h3>How to use</h3>
+        <p>Add this to your MCP client config:</p>
+        <pre>{
+  "mcpServers": {
+    "coffee-break": {
+      "type": "streamable-http",
+      "url": "https://your-app.railway.app/mcp",
+      "headers": {
+        "Authorization": "Bearer <%= token %>"
+      }
+    }
+  }
+}</pre>
+        <p><a href="/stats">View your stats</a></p>
+      </div>
+    <% } else { %>
+      <div class="card">
+        <h2>Get Started</h2>
+        <p>Generate an anonymous token to track your coffee breaks.</p>
+        <p>No email required. Just click the button.</p>
+        <form method="POST" action="/auth/register">
+          <button type="submit">Generate Token</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>Already have a token?</h2>
+        <p><a href="/stats">View your stats</a></p>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
