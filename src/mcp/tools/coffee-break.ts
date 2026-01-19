@@ -1,4 +1,4 @@
-import { takeCoffeeBreak } from "../../services/coffee-break.js";
+import { takeCoffeeBreak } from '../../services/coffee-break.js';
 
 export async function handleCoffeeBreak(
   userId?: string,
