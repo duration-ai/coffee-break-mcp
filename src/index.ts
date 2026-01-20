@@ -1,14 +1,18 @@
+import cookieParser from 'cookie-parser';
 import express, { type Request, type Response } from 'express';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { createMcpServer } from './mcp/server.js';
 import { getUserByToken } from './services/user.js';
 import authRoutes from './routes/auth.js';
 import statsRoutes from './routes/stats.js';
+import { getTokenFromRequest } from './lib/cookies.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.set('trust proxy', 1);
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -18,6 +22,12 @@ app.set('views', './src/views');
 // Health check
 app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok' });
+});
+
+// Homepage
+app.get('/', (req: Request, res: Response) => {
+  const token = getTokenFromRequest(req);
+  res.render('index', { hasToken: Boolean(token) });
 });
 
 // Auth and stats routes

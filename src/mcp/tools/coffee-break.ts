@@ -2,7 +2,7 @@ import { takeCoffeeBreak } from '../../services/coffee-break.js';
 
 export async function handleCoffeeBreak(
   userId?: string,
-  durationMinutes?: number,
+  durationSeconds?: number,
 ): Promise<string> {
-  return takeCoffeeBreak(userId, durationMinutes);
+  return takeCoffeeBreak(userId, durationSeconds);
 }

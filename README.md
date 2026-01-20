@@ -1,18 +1,37 @@
 # Coffee Break MCP Server
 
-A joke MCP server with one tool (`take_coffee_break`) that sleeps for 1-5 minutes. Includes optional user registration for tracking stats.
+A joke MCP server with one tool (`take_coffee_break`) that sleeps for 1-900 seconds. Includes optional user registration for tracking stats.
 
 ## The Tool
 
 **Name:** `take_coffee_break`
 
+**Input:** `{ "durationSeconds"?: number }` (1-900 seconds)
+
 When called, this tool:
 1. Records the break start time
-2. Sleeps for the requested duration (1-5 minutes)
+2. Sleeps for the requested duration (1-900 seconds)
 3. Records the break completion
-4. Returns: "Coffee break complete. X minutes elapsed. Returning to work."
+4. Returns: "Coffee break complete. X seconds elapsed. Returning to work."
 
-The tool accepts an optional `durationMinutes` argument (1-5). If omitted, it uses `COFFEE_BREAK_DEFAULT_MINUTES` or defaults to 5 minutes.
+The tool accepts an optional `durationSeconds` argument (1-900). If omitted, it uses `COFFEE_BREAK_DEFAULT_SECONDS` or defaults to 300 seconds.
+
+**Note:** Long requests can be cut off by proxies/load balancers. On Railway, the edge proxy advertises a 15-minute max request duration and a 60-second keep-alive; very long breaks may still fail in practice. Shorter breaks are more reliable.
+
+## Privacy & Data
+
+- No email or account required.
+- Tokens are stored in a browser cookie for convenience.
+- Stats are tied only to the token.
+
+## Abuse & Limits
+
+- Token generation is rate-limited per IP.
+- Break duration is capped at 900 seconds.
+
+## Disclaimer
+
+This is a toy/joke project. It is not production-grade.
 
 ## Usage
 

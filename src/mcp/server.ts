@@ -1,8 +1,8 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import * as z from 'zod/v4';
 import {
-  MAX_BREAK_MINUTES,
-  MIN_BREAK_MINUTES,
+  MAX_BREAK_SECONDS,
+  MIN_BREAK_SECONDS,
 } from '../services/coffee-break.js';
 import { handleCoffeeBreak } from './tools/coffee-break.js';
 
@@ -18,20 +18,20 @@ export function createMcpServer(
     'take_coffee_break',
     {
       description:
-        'Take a coffee break. This tool will sleep for the requested duration before returning. Duration must be 1-5 minutes; defaults to COFFEE_BREAK_DEFAULT_MINUTES or 5 minutes.',
+        'Take a coffee break. This tool will sleep for the requested duration before returning. Duration must be 1-900 seconds; defaults to COFFEE_BREAK_DEFAULT_SECONDS or 300 seconds.',
       inputSchema: {
-        durationMinutes: z
+        durationSeconds: z
           .number()
           .int()
-          .min(MIN_BREAK_MINUTES)
-          .max(MAX_BREAK_MINUTES)
+          .min(MIN_BREAK_SECONDS)
+          .max(MAX_BREAK_SECONDS)
           .optional()
-          .describe('Break duration in minutes (1-5).'),
+          .describe('Break duration in seconds (1-900).'),
       },
     },
     async (args) => {
       const userId = getUserIdFromContext();
-      const result = await handleCoffeeBreak(userId, args?.durationMinutes);
+      const result = await handleCoffeeBreak(userId, args?.durationSeconds);
       return {
         content: [{ type: 'text', text: result }],
       };

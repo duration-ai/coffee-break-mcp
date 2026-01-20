@@ -3,78 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Stats - Coffee Break MCP</title>
+  <title>Stats - Coffee Break MCP</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Coffee Break MCP</h1>
-    <p class="subtitle">Your coffee break stats</p>
+  <div class="page">
+    <main class="stack">
+      <h1 class="title">Stats</h1>
+      <p class="subtitle">Your break history.</p>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-number"><%= stats.totalBreaks %></div>
-        <div class="stat-label">Total Breaks</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number"><%= stats.breaksThisWeek %></div>
-        <div class="stat-label">This Week</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">
-          <% if (stats.averageDurationMs) { %>
-            <%= Math.round(stats.averageDurationMs / 60000) %>m
-          <% } else { %>
-            --
-          <% } %>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.totalBreaks %></div>
+          <div class="stat-label">Total</div>
         </div>
-        <div class="stat-label">Avg Duration</div>
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.breaksThisWeek %></div>
+          <div class="stat-label">This week</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">
+            <% if (stats.averageDurationMs) { %>
+              <%= Math.round(stats.averageDurationMs / 1000) %>s
+            <% } else { %>
+              --
+            <% } %>
+          </div>
+          <div class="stat-label">Avg</div>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h2>Recent Breaks</h2>
-      <% if (stats.lastTenBreaks.length === 0) { %>
-        <p>No coffee breaks yet. Go take one!</p>
-      <% } else { %>
-        <table>
-          <thead>
-            <tr>
-              <th>Started</th>
-              <th>Status</th>
-              <th>Duration</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% stats.lastTenBreaks.forEach(function(b) { %>
-              <tr>
-                <td><%= new Date(b.startedAt).toLocaleString() %></td>
-                <td>
-                  <% if (b.isComplete) { %>
-                    <span class="badge complete">Complete</span>
-                  <% } else { %>
-                    <span class="badge in-progress">In Progress</span>
-                  <% } %>
-                </td>
-                <td>
-                  <% if (b.durationMs) { %>
-                    <%= Math.round(b.durationMs / 60000) %> min
-                  <% } else { %>
-                    --
-                  <% } %>
-                </td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      <% } %>
-    </div>
+      <div class="card">
+        <% if (stats.lastTenBreaks.length === 0) { %>
+          <p class="muted">No breaks yet.</p>
+        <% } else { %>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Started</th>
+                  <th>Status</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% stats.lastTenBreaks.forEach(function(b) { %>
+                  <tr>
+                    <td><%= new Date(b.startedAt).toLocaleString() %></td>
+                    <td>
+                      <% if (b.isComplete) { %>
+                        <span class="badge">Complete</span>
+                      <% } else { %>
+                        <span class="badge">In progress</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% if (b.durationMs) { %>
+                        <%= Math.round(b.durationMs / 1000) %> s
+                      <% } else { %>
+                        --
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
 
-    <div class="card">
-      <h2>Your Token</h2>
-      <code class="token"><%= token %></code>
-      <p><a href="/auth/register">Generate a new token</a></p>
-    </div>
+      <div class="card">
+        <p class="muted">Use a different token</p>
+        <form class="form" method="POST" action="/stats">
+          <input
+            type="text"
+            name="token"
+            placeholder="token"
+            required
+          >
+          <button class="button" type="submit">Load stats</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <p class="muted">Token</p>
+        <code class="token" id="token-value"><%= token %></code>
+        <div class="row" style="margin-top: 12px;">
+          <button class="button" type="button" data-copy="token-value">Copy</button>
+          <form method="POST" action="/auth/logout">
+            <button class="button" type="submit">Sign out</button>
+          </form>
+        </div>
+      </div>
+
+      <a class="muted" href="/">Back</a>
+    </main>
   </div>
+
+  <script>
+    document.querySelectorAll('[data-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const targetId = button.getAttribute('data-copy');
+        const target = targetId ? document.getElementById(targetId) : null;
+        if (!target) {
+          return;
+        }
+        const text = target.textContent || '';
+        try {
+          await navigator.clipboard.writeText(text.trim());
+          button.textContent = 'Copied';
+          setTimeout(() => {
+            button.textContent = 'Copy';
+          }, 1500);
+        } catch {
+          button.textContent = 'Copy failed';
+        }
+      });
+    });
+  </script>
 </body>
 </html>

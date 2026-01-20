@@ -2,26 +2,26 @@ import { eq, desc, sql, and, gte } from 'drizzle-orm';
 import { db } from '../db/index.js';
 import { coffeeBreaks, type CoffeeBreak } from '../db/schema.js';
 
-export const MIN_BREAK_MINUTES = 1;
-export const MAX_BREAK_MINUTES = 5;
-const DEFAULT_BREAK_MINUTES = 5;
+export const MIN_BREAK_SECONDS = 1;
+export const MAX_BREAK_SECONDS = 900;
+const DEFAULT_BREAK_SECONDS = 300;
 
-function clampBreakMinutes(minutes: number): number {
-  return Math.min(MAX_BREAK_MINUTES, Math.max(MIN_BREAK_MINUTES, minutes));
+function clampBreakSeconds(seconds: number): number {
+  return Math.min(MAX_BREAK_SECONDS, Math.max(MIN_BREAK_SECONDS, seconds));
 }
 
-export function resolveBreakMinutes(requestedMinutes?: number): number {
-  if (typeof requestedMinutes === 'number' && Number.isInteger(requestedMinutes)) {
-    return clampBreakMinutes(requestedMinutes);
+export function resolveBreakSeconds(requestedSeconds?: number): number {
+  if (typeof requestedSeconds === 'number' && Number.isInteger(requestedSeconds)) {
+    return clampBreakSeconds(requestedSeconds);
   }
 
-  const rawDefault = process.env.COFFEE_BREAK_DEFAULT_MINUTES;
+  const rawDefault = process.env.COFFEE_BREAK_DEFAULT_SECONDS;
   const parsedDefault = rawDefault ? Number.parseInt(rawDefault, 10) : NaN;
   if (!Number.isNaN(parsedDefault)) {
-    return clampBreakMinutes(parsedDefault);
+    return clampBreakSeconds(parsedDefault);
   }
 
-  return DEFAULT_BREAK_MINUTES;
+  return DEFAULT_BREAK_SECONDS;
 }
 
 export async function startCoffeeBreak(userId?: string): Promise<CoffeeBreak> {
@@ -54,10 +54,10 @@ export async function completeCoffeeBreak(
 
 export async function takeCoffeeBreak(
   userId?: string,
-  requestedMinutes?: number,
+  requestedSeconds?: number,
 ): Promise<string> {
-  const breakMinutes = resolveBreakMinutes(requestedMinutes);
-  const durationMs = breakMinutes * 60 * 1000;
+  const breakSeconds = resolveBreakSeconds(requestedSeconds);
+  const durationMs = breakSeconds * 1000;
   const coffeeBreak = await startCoffeeBreak(userId);
 
   // Sleep for the requested duration
@@ -65,7 +65,7 @@ export async function takeCoffeeBreak(
 
   await completeCoffeeBreak(coffeeBreak.id, durationMs);
 
-  return `Coffee break complete. ${breakMinutes} minutes elapsed. Returning to work.`;
+  return `Coffee break complete. ${breakSeconds} seconds elapsed. Returning to work.`;
 }
 
 export interface UserStats {

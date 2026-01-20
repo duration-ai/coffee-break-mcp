@@ -1,7 +1,7 @@
 {
   "name": "coffee-break-mcp",
   "version": "1.0.0",
-  "description": "A joke MCP server with one tool that sleeps for 1-5 minutes",
+  "description": "A joke MCP server with one tool that sleeps for 1-900 seconds",
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
@@ -17,15 +17,18 @@
   "dependencies": {
     "@libsql/client": "^0.17.0",
     "@modelcontextprotocol/sdk": "^1.0.0",
+    "cookie-parser": "^1.4.6",
     "drizzle-orm": "^0.38.0",
     "ejs": "^3.1.10",
     "express": "^5.0.1",
+    "express-rate-limit": "^7.4.1",
     "nanoid": "^5.0.9",
     "zod": "^3.24.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
+    "@types/cookie-parser": "^1.4.7",
     "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",
