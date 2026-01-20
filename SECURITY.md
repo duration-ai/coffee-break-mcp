@@ -4,7 +4,7 @@
 
 If you discover a security issue, please email:
 
-- tim@thill.in
+- tim@duration.ai
 
 Please include a clear description and steps to reproduce. We will respond as
 soon as possible.

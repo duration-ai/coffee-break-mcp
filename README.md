@@ -24,15 +24,6 @@ The tool requires a `durationSeconds` argument (1-900).
 - Tokens are stored in a browser cookie for convenience.
 - Stats are tied only to the token.
 
-## Abuse & Limits
-
-- Token generation is rate-limited per IP.
-- Break duration is capped at 900 seconds.
-
-## Disclaimer
-
-This is a toy/joke project. It is not production-grade.
-
 ## Usage
 
 ### Anonymous Usage
@@ -44,7 +35,7 @@ Just connect to the MCP endpoint - no registration required:
   "mcpServers": {
     "coffee-break": {
       "type": "streamable-http",
-      "url": "https://your-app.railway.app/mcp"
+      "url": "https://coffee-break-mcp-production.up.railway.app/mcp"
     }
   }
 }
@@ -52,7 +43,7 @@ Just connect to the MCP endpoint - no registration required:
 
 ### With Stats Tracking
 
-1. Visit `/auth/register` to generate an anonymous token
+1. Visit `https://coffee-break-mcp-production.up.railway.app/auth/register` to generate an anonymous token
 2. Save your token (shown only once)
 3. Add it to your MCP config:
 
@@ -61,7 +52,7 @@ Just connect to the MCP endpoint - no registration required:
   "mcpServers": {
     "coffee-break": {
       "type": "streamable-http",
-      "url": "https://your-app.railway.app/mcp",
+      "url": "https://coffee-break-mcp-production.up.railway.app/mcp",
       "headers": {
         "Authorization": "Bearer your-api-token"
       }
@@ -70,7 +61,7 @@ Just connect to the MCP endpoint - no registration required:
 }
 ```
 
-4. View your stats at `/stats`
+4. View your stats at `https://coffee-break-mcp-production.up.railway.app/stats`
 
 ## Development
 
