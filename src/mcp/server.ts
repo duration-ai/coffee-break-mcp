@@ -18,20 +18,19 @@ export function createMcpServer(
     'take_coffee_break',
     {
       description:
-        'Take a coffee break. This tool will sleep for the requested duration before returning. Duration must be 1-900 seconds; defaults to COFFEE_BREAK_DEFAULT_SECONDS or 300 seconds.',
+        'Take a coffee break. This tool will sleep for the requested duration before returning. Duration must be 1-900 seconds.',
       inputSchema: {
         durationSeconds: z
           .number()
           .int()
           .min(MIN_BREAK_SECONDS)
           .max(MAX_BREAK_SECONDS)
-          .optional()
           .describe('Break duration in seconds (1-900).'),
       },
     },
     async (args) => {
       const userId = getUserIdFromContext();
-      const result = await handleCoffeeBreak(userId, args?.durationSeconds);
+      const result = await handleCoffeeBreak(userId, args.durationSeconds);
       return {
         content: [{ type: 'text', text: result }],
       };

@@ -14,7 +14,7 @@ When called, this tool:
 3. Records the break completion
 4. Returns: "Coffee break complete. X seconds elapsed. Returning to work."
 
-The tool accepts an optional `durationSeconds` argument (1-900). If omitted, it uses `COFFEE_BREAK_DEFAULT_SECONDS` or defaults to 300 seconds.
+The tool requires a `durationSeconds` argument (1-900).
 
 **Note:** Long requests can be cut off by proxies/load balancers. On Railway, the edge proxy advertises a 15-minute max request duration and a 60-second keep-alive; very long breaks may still fail in practice. Shorter breaks are more reliable.
 
