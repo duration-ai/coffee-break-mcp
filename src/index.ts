@@ -27,7 +27,8 @@ app.get('/health', (_req: Request, res: Response) => {
 // Homepage
 app.get('/', (req: Request, res: Response) => {
   const token = getTokenFromRequest(req);
-  res.render('index', { hasToken: Boolean(token) });
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  res.render('index', { hasToken: Boolean(token), baseUrl });
 });
 
 // Auth and stats routes
